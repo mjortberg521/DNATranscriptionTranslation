@@ -1,9 +1,9 @@
-DNAStrand = 'aaatacctctcggactcctcaagtttgagctaagccaatcgaccccaaaggaagaggtaacgtcgcgtgcgagaggcaccgagtcctcctgggatgttagttattaaatgcctg'
+DNAStrand = 'aaagtacctctcggactcctcaagtttgagctaagccaatcgaccccaaaggaagaggtaacgtcgcgtgcgagaggcaccgagtcctcctgggatgttagttattaaatgcctga'
 
 def transcription(seq):
 		DNA = list(seq) #insert seq here for strand instead to use as a normal function. 
 		RNA = []
-		
+
 		for index in range (len(DNA)): #Switches out the DNA nucleotide for an RNA one.
 			
 			if DNA[index] == "a":
@@ -18,13 +18,13 @@ def transcription(seq):
 			elif DNA[index] == "g":
 				RNA.append("c")
 
-		return RNA #This returns an RNA string
+		return RNA #This returns a list of RNA nucleotides
 
-RNA = transcription(DNAStrand)
+RNA = transcription(DNAStrand) 
 
 RawRNAString = "".join(RNA) #convert RNA from list back to string
 
-print '\n'
+print '\n' #Line break
 print 'Raw RNA String:', RawRNAString
 
 def substring_after(s, delim):
@@ -34,50 +34,50 @@ RNAString = substring_after(RawRNAString, 'aug') #Gets the entire string after t
 
 #print 'RNA String Without Start:',RNAString 
 
-RNAcodons = [RNAString[x:x+3] for x in xrange(0, len(RNAString), 3)]  #Break up the transcribed strand into codons (this makes a list)
+RNAcodons = [RNAString[x:x+3] for x in xrange(0, len(RNAString), 3)]  #Break up the transcribed strand into codons (this makes a list of groups of 3)
 
-RNAcodons.insert(0,'aug') #ADD BACK THE AUG CODON TO THE BEGINNING OF THE RNA CODON LIST (before position 0)
+RNAcodons.insert(0,'aug') #Add the AUG codon back to position 0. 
 
 #print 'List Of Codons With Start:',RNAcodons
 
-def substring_before(s):  #Find the index of the stop codon
+def substring_before(s): #Function to get the list before the stop codon (deletes the stop codon-uaa, uag, or uga)
 	FullRNACodons = []
 
-	if 'uaa' in s:
-		x = s.index('uaa')
+	if 'uaa' in s: 
+		x = s.index('uaa') #Define position of UAA stop codon as x
 	else: 
 		x = 0
 
 	if 'uag' in s:
-		y = s.index('uag')
+		y = s.index('uag') #Define position of UAA stop codon as y
 	else: 
 		y = 0
 
 	if 'uga' in s:
-		z = s.index('uga')
+		z = s.index('uga') #Define position of UAA stop codon as z
 	else: 
 		z = 0
 
-	if x != 0:
-		FullRNACodons = s[:x] #Delete after the stop codon
+	if x != 0: 
+		FullRNACodons = s[:x] #Take the list before the position of the stop codon
 		FullRNACodons.append('uaa') #Add back the stop codon
 
 	if y != 0:
 		FullRNACodons = s[:y]
-		FullRNACodons.append('uag') #Add back the stop codon
+		FullRNACodons.append('uag')
 
 	if z != 0:
 		FullRNACodons = s[:z]
-		FullRNACodons.append('uga') #Add back the stop codon
+		FullRNACodons.append('uga') 
 
 	return FullRNACodons 
 
 FullRNACodons = substring_before(RNAcodons)
 
-print '\n'
+print '\n' #Line break
 print 'List Of RNA Codons in Correct Reading Frame:',FullRNACodons
 
-proteins = {
+proteins = { #This is a dictionary of RNA codons and their corresponding proteins
 	'uuu': 'phe', 
 	'uuc': 'phe', 
 	'uua': 'leu',
@@ -145,13 +145,13 @@ proteins = {
 	}
 
 def translation(seq):
-	proteinlist = []
+	proteinlist = [] #Create an empty list
 
-	for i, val in enumerate(seq):
-		if val in proteins:
-			protein = proteins.get(val)
+	for i, val in enumerate(seq): #Go through all the RNA codons in the list 
+		if val in proteins: #If the codon is a key in the dict
+			protein = proteins.get(val) #Get the definition for the key (a protein)
 			
-			proteinlist.append(protein)
+			proteinlist.append(protein) #Add the proten to proteinlsit
 
 	return proteinlist
 
@@ -160,4 +160,3 @@ proteinlist = translation(FullRNACodons)
 
 print '\n'
 print 'List of Protein Codons:',proteinlist
-
